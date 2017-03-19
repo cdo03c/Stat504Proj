@@ -16,10 +16,10 @@ dict = pdf_text("./NHES_2012_pfi_codebook.pdf")
 header = vector()
 widths = vector()
 for(i in 1:length(dict)){
-  m <- gregexpr('([A-Z]{5,}\\d+|[A-Z]_[A-Z]{5,}|[A-Z]{5,})', dict[i])
+  m <- gregexpr('([A-Z]{5,}\\d+|[A-Z]_[A-Z]{5,}|[A-Z]{4,})', dict[i])
   vars = unlist(regmatches(dict[i], m))
   if(!identical(vars, character(0))){
-    vars = vars[!vars %in% c('IMPUTATION', 'FINAL', 'REPLICATE', 'WEIGHT')]
+    vars = vars[!vars %in% c('NHES','IMPUTATION', 'FINAL', 'REPLICATE', 'WEIGHT')]
     header = c(header,unique(vars))
   }
   w <- gregexpr('(\\d+-\\d+)', dict[i])
@@ -43,4 +43,4 @@ length(header)
 #Subset to the first 91 columns of data
 df2 = df[1:91]
 colnames(df2) = header[1:91]
-head(df2)
+head(df2,1)
