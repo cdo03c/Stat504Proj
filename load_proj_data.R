@@ -34,7 +34,7 @@ for(i in 1:length(dict)){
 #Trims the header and width to just the variables form the NHES survey and
 #removes all the weight and imputation variables.
 header = header[1:356]
-widths = c(12,8,1,rep(2,353))
+widths = c(12,8,1,rep(2,21),3,rep(2,331))
 
 #Load data table for NHES 2012 study
 if(!file.exists("./pfi_pu_pert_ascii.dat")){
@@ -42,13 +42,13 @@ if(!file.exists("./pfi_pu_pert_ascii.dat")){
                 destfile = "./NHES_2012_pfi_codebook.pdf")
 }
 df = read.fwf("./pfi_pu_pert_ascii.dat", widths = widths)
-head(df)
-length(header)
+#head(df)
+#length(header)
 
 #Subset to the first 356 columns of data to match the header character vector
 df2 = df[1:356]
 colnames(df2) = header
-head(df2,1)
+head(df2,2)
 
 #Subset data by PATH variable where E stands for elemntary student
 df2 = df2[df2$PATH == 'E',]
