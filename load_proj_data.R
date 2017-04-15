@@ -48,7 +48,14 @@ df = read.fwf("./pfi_pu_pert_ascii.dat", widths = widths)
 #Subset to the first 356 columns of data to match the header character vector
 df2 = df[1:356]
 colnames(df2) = header
-head(df2,2)
+#head(df2,2)
 
-#Subset data by PATH variable where E stands for elemntary student
+#Subset data by PATH variable where E stands for elementary student and subset
+#the SEGRADES variables which will be the independent variable for this study
+#by the four levels that indicate the general letter grade of the student.
 df2 = df2[df2$PATH == 'E',]
+df2 = df2[df2$SEGRADES %in% c(1,2,3,4),]
+
+#Write out the truncated data set as a .csv for faster loading of the data in
+#analysis script
+write.csv(df2, 'processed_NHES_data.csv')
