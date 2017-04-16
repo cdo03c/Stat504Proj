@@ -21,7 +21,7 @@ dict = pdf_text("./NHES_2012_pfi_codebook.pdf")
 #vector called widths
 header = vector()
 for(i in 1:length(dict)){
-  m <- gregexpr('([A-Z]{4,}\\d+|[A-Z]{1,}\\d+[A-Z]{2,}|[A-Z]_[A-Z]{5,}|[A-Z]{4,})', dict[i])
+  m <- gregexpr('([A-Z]{3,}\\d+|[A-Z]{1,}\\d+[A-Z]{2,}|[A-Z]_[A-Z]{5,}|[A-Z]{4,})', dict[i])
   vars = unlist(regmatches(dict[i], m))
   if(!identical(vars, character(0))){
     vars = vars[!vars %in% c('NHES','IMPUTATION', 'FINAL', 'REPLICATE',
@@ -34,7 +34,7 @@ for(i in 1:length(dict)){
 #Trims the header and width to just the variables form the NHES survey and
 #removes all the weight and imputation variables.
 header = header[1:356]
-widths = c(12,8,1,rep(2,21),3,rep(2,331))
+widths = c(12,8,1,rep(2,21),3,rep(2,181),4,rep(2,149))
 
 #Load data table for NHES 2012 study
 if(!file.exists("./pfi_pu_pert_ascii.dat")){
@@ -55,6 +55,11 @@ colnames(df2) = header
 #by the four levels that indicate the general letter grade of the student.
 df2 = df2[df2$PATH == 'E',]
 df2 = df2[df2$SEGRADES %in% c(1,2,3,4),]
+
+#Removes columns in the data that represents variables that are only applicable
+#to non-elementary students such as the binary variable SEREPT7 which
+#captures if a student repeated 7th grade and does not apply to our target population.
+df2 = df2[-c(34:39, 119:124, 206:207, 355:356)]
 
 #Write out the truncated data set as a .csv for faster loading of the data in
 #analysis script
