@@ -39,7 +39,7 @@ widths = c(12,8,1,rep(2,21),3,rep(2,181),4,rep(2,149))
 #Load data table for NHES 2012 study
 if(!file.exists("./pfi_pu_pert_ascii.dat")){
   download.file(url = "https://raw.githubusercontent.com/cdo03c/Stat504Proj/master/pfi_pu_pert_ascii.dat",
-                destfile = "./NHES_2012_pfi_codebook.pdf")
+                destfile = "./pfi_pu_pert_ascii.dat")
 }
 df = read.fwf("./pfi_pu_pert_ascii.dat", widths = widths)
 #head(df)
