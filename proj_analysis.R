@@ -74,15 +74,164 @@ mod2.BIC = stepAIC(mod2, scope = list(upper = ~SEGRADEQ * SESCHWRK * SEENJOY * Y
 mod2.BIC.AIC = stepAIC(mod2.BIC, scope = list(upper = ~SEGRADEQ * SESCHWRK * SEENJOY * SEFUTUREX *
                                                 RACEETHN* CENREG, lower = ~1))
 
-#Creates all the models from intercept only to fully saturated with the six variable
-#model suggested by running StepAIC with BIC penalty.
+diagnoseModel = function(mod){
+  ## store coefficient table
+  ctable <- coef(summary(mod))
+  
+  ## calculate and store p values
+  p <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+  
+  ## combined table
+  print(ctable <- cbind(ctable, "p value" = p))
+  
+  #Calculate the confidence intervals for explantory variables
+  (ci <- confint(mod))
+}
+
+#Proposed model 1
+mod.fin1 <- polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + SEFUTUREX + RACEETHN +
+                  CENREG + SEGRADEQ:RACEETHN, data=NHES.comp, Hess = T)
+
+## store coefficient table
+ctable <- coef(summary(mod.fin2))
+
+## calculate and store p values
+p <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+print(ctable <- cbind(ctable, "p value" = p))
+
+ci <- confint(mod.fin2)
+
+exp(cbind(OR = coef(mod.fin2), ci))
+
+#Further exploration of the model shows that coefficients for SEFUTUREX are not significant
+#and that the 95% confidnece interval for category 5 for SEGRADEQ goes to Inf.  
+#Therefore, we are going to remove SEFUTUREX from the model and combine 
+#categories 4 and 5 for SEGRADEQ.
+
+NHES.comp$SEGRADEQ = ifelse(NHES.comp$SEGRADEQ == 5, 4, NHES.comp$SEGRADEQ)
+
+mod.fin2 = polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + RACEETHN +
+                  CENREG + SEGRADEQ:RACEETHN, data=NHES.comp, Hess = T)
+
+diagnoseModel(mod.fin2)
+
+#Creates all the models from intercept only to fully saturated with the five variable
+#model suggested by running StepAIC with BIC penalty and evaluating the significance
+#of the coefficients.
+
+printDev = function(model1){
+  print(model1$call)
+  print(model1$deviance)
+  print(model1$df.residual)
+}
 
 #Intercept-only model
-mod6.0 = polr(NHES$SEGRADES ~ 1,Hess=TRUE)
+fit0 = polr(NHES.comp$SEGRADES ~ 1,Hess=TRUE)
+printDev(fit0)
+
+### Single Variable Models ###
+
+fit1.1 = polr(NHES.comp$SEGRADES ~ SEGRADEQ,Hess=TRUE, data = NHES.comp)
+fit1.2 = polr(NHES.comp$SEGRADES ~ SESCHWRK,Hess=TRUE, data = NHES.comp)
+fit1.3 = polr(NHES.comp$SEGRADES ~ SEENJOY,Hess=TRUE, data = NHES.comp)
+fit1.4 = polr(NHES.comp$SEGRADES ~ RACEETHN,Hess=TRUE, data = NHES.comp)
+fit1.5 = polr(NHES.comp$SEGRADES ~ CENREG,Hess=TRUE, data = NHES.comp)
+printDev(fit1.1)
+printDev(fit1.2)
+printDev(fit1.3)
+printDev(fit1.4)
+printDev(fit1.5)
+
+### Two variable models ###
+
+#The models that include SEGRADEQ are always the lowest so after the two
+#variable models we will be testing only models with SEGRADEQ in them.
+
+#Independence models
+fit2.1.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK,Hess=TRUE, data = NHES.comp)
+fit2.1.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY,Hess=TRUE, data = NHES.comp)
+fit2.1.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + RACEETHN,Hess=TRUE, data = NHES.comp)
+fit2.1.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + CENREG,Hess=TRUE, data = NHES.comp)
+fit2.2.3 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEENJOY,Hess=TRUE, data = NHES.comp)
+fit2.2.4 = polr(NHES.comp$SEGRADES ~ SESCHWRK + RACEETHN,Hess=TRUE, data = NHES.comp)
+fit2.2.5 = polr(NHES.comp$SEGRADES ~ SESCHWRK + CENREG,Hess=TRUE, data = NHES.comp)
+fit2.3.4 = polr(NHES.comp$SEGRADES ~ SEENJOY+ RACEETHN,Hess=TRUE, data = NHES.comp)
+fit2.3.5 = polr(NHES.comp$SEGRADES ~ SEENJOY+ CENREG,Hess=TRUE, data = NHES.comp)
+fit2.4.5 = polr(NHES.comp$SEGRADES ~ RACEETHN + CENREG,Hess=TRUE, data = NHES.comp)
+
+printDev(fit2.1.2)
+printDev(fit2.1.3)
+printDev(fit2.1.4)
+printDev(fit2.1.5)
+printDev(fit2.2.3)
+printDev(fit2.2.4)
+printDev(fit2.2.5)
+printDev(fit2.3.4)
+printDev(fit2.3.5)
+printDev(fit2.4.5)
+
+#Association models
+fit2.12 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEGRADEQ:SESCHWRK,Hess=TRUE, data = NHES.comp)
+fit2.13 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY,Hess=TRUE, data = NHES.comp)
+fit2.14 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN,Hess=TRUE, data = NHES.comp)
+fit2.15 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG,Hess=TRUE, data = NHES.comp)
+
+printDev(fit2.12)
+printDev(fit2.13)
+printDev(fit2.14)
+printDev(fit2.15)
+
+
+### Three variable models ###
+
+#Independence models
+fit3.1.2.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY,Hess=TRUE, data = NHES.comp)
+fit3.1.2.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + RACEETHN,Hess=TRUE, data = NHES.comp)
+fit3.1.2.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + CENREG,Hess=TRUE, data = NHES.comp)
+fit3.1.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY + RACEETHN,Hess=TRUE, data = NHES.comp)
+fit3.1.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY + CENREG,Hess=TRUE, data = NHES.comp)
+fit3.1.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + RACEETHN + CENREG,Hess=TRUE, data = NHES.comp)
+
+printDev(fit3.1.2.3)
+printDev(fit3.1.2.4)
+printDev(fit3.1.2.5)
+printDev(fit3.1.3.4)
+printDev(fit3.1.3.5)
+printDev(fit3.1.4.5)
+
+#The independence model with the most significant delta deviance is the model,
+#SEGRADEQ + SESCHWRK + SEENJOY and all the subsequent three variable model will
+#be based only on this model.
+
+#Joint independence models
+fit3.12.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY,Hess=TRUE, data = NHES.comp)
+fit3.1.23 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
+fit3.13.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  * SEENJOY + SESCHWRK,Hess=TRUE, data = NHES.comp)
+
+printDev(fit3.12.3)
+printDev(fit3.1.23)
+printDev(fit3.13.2)
+
+#Conditional independence models
+fit3.12.13 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ * SEENJOY,Hess=TRUE, data = NHES.comp)
+fit3.12.23 = polr(NHES.comp$SEGRADES ~ SESCHWRK * SEGRADEQ + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
+fit3.13.23 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  * SEENJOY + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
+
+printDev(fit3.12.13)
+printDev(fit3.12.23)
+printDev(fit3.13.23)
+
+#Homogenous association models
+
+#Fully saturated model
 
 #Complete independence model
-mod6.ind <- polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + SEFUTUREX +
-               RACEETHN + CENREG, data=NHES.comp)
+fit.ind <- polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY +
+               RACEETHN + CENREG, data=NHES.comp,Hess=TRUE)
+
+
 
 #Joint independence models
 
@@ -91,11 +240,20 @@ mod6.ind <- polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + SEFUTUREX +
 #Homogenous association models
 
 #Fully saturated model
-mod6.sat <- polr(SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * SEFUTUREX *
-               RACEETHN * CENREG, data=NHES.comp)
+fit.sat <- polr(SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * RACEETHN * CENREG, data=NHES.comp,Hess=TRUE)
 
 
 
+mod3.0 = polr(NHES$SEGRADES ~ 1,Hess=TRUE)
+mod3.1 = polr(NHES$SEGRADES ~ SEGRADEQ, data = NHES.comp,Hess=TRUE)
+mod3.2 = polr(NHES$SEGRADES ~ SESCHWRK, data = NHES.comp,Hess=TRUE)
+mod3.3 = polr(NHES$SEGRADES ~ SEENJOY, data = NHES.comp,Hess=TRUE)
+mod3.1.2 = polr(NHES$SEGRADES ~ SEGRADEQ + SESCHWRK, data = NHES.comp,Hess=TRUE)
+mod3.1.3 = polr(NHES$SEGRADES ~ SEGRADEQ + SEENJOY, data = NHES.comp,Hess=TRUE)
+mod3.2.3 = polr(NHES$SEGRADES ~ SESCHWRK +SEENJOY, data = NHES.comp,Hess=TRUE)
+mod3.12 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK, data = NHES.comp,Hess=TRUE)
+mod3.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY, data = NHES.comp,Hess=TRUE)
+mod3.23 = polr(NHES$SEGRADES ~ SESCHWRK * SEENJOY, data = NHES.comp,Hess=TRUE)
 
 # mod3.12 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK, data = NHES.comp,Hess=TRUE)
 # mod3.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY, data = NHES.comp,Hess=TRUE)
