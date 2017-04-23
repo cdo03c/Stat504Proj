@@ -138,11 +138,9 @@ fit1.2 = polr(NHES.comp$SEGRADES ~ SESCHWRK,Hess=TRUE, data = NHES.comp)
 fit1.3 = polr(NHES.comp$SEGRADES ~ SEENJOY,Hess=TRUE, data = NHES.comp)
 fit1.4 = polr(NHES.comp$SEGRADES ~ RACEETHN,Hess=TRUE, data = NHES.comp)
 fit1.5 = polr(NHES.comp$SEGRADES ~ CENREG,Hess=TRUE, data = NHES.comp)
-printDev(fit1.1)
-printDev(fit1.2)
-printDev(fit1.3)
-printDev(fit1.4)
-printDev(fit1.5)
+anova(fit0, fit1.1, fit1.2, fit1.3, fit1.4, fit1.5)
+
+cum.anova = anova(fit0, fit1.1)
 
 ### Two variable models ###
 
@@ -161,27 +159,20 @@ fit2.3.4 = polr(NHES.comp$SEGRADES ~ SEENJOY+ RACEETHN,Hess=TRUE, data = NHES.co
 fit2.3.5 = polr(NHES.comp$SEGRADES ~ SEENJOY+ CENREG,Hess=TRUE, data = NHES.comp)
 fit2.4.5 = polr(NHES.comp$SEGRADES ~ RACEETHN + CENREG,Hess=TRUE, data = NHES.comp)
 
-printDev(fit2.1.2)
-printDev(fit2.1.3)
-printDev(fit2.1.4)
-printDev(fit2.1.5)
-printDev(fit2.2.3)
-printDev(fit2.2.4)
-printDev(fit2.2.5)
-printDev(fit2.3.4)
-printDev(fit2.3.5)
-printDev(fit2.4.5)
+anova(fit0, fit1.1, fit2.1.2,fit2.1.3,
+      fit2.1.4, fit2.1.5, fit2.2.3, fit2.2.4, fit2.2.5, fit2.3.4, fit2.3.5,
+      fit2.4.5)
+cum.anova = anova(fit0, fit1.1, fit2.1.2)
 
 #Association models
-fit2.12 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEGRADEQ:SESCHWRK,Hess=TRUE, data = NHES.comp)
+fit2.12 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK,Hess=TRUE, data = NHES.comp)
 fit2.13 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY,Hess=TRUE, data = NHES.comp)
 fit2.14 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN,Hess=TRUE, data = NHES.comp)
 fit2.15 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG,Hess=TRUE, data = NHES.comp)
 
-printDev(fit2.12)
-printDev(fit2.13)
-printDev(fit2.14)
-printDev(fit2.15)
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit2.13, fit2.14, fit2.15)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12)
 
 
 ### Three variable models ###
@@ -194,12 +185,10 @@ fit3.1.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY + RACEETHN,Hess=TRUE, 
 fit3.1.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY + CENREG,Hess=TRUE, data = NHES.comp)
 fit3.1.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + RACEETHN + CENREG,Hess=TRUE, data = NHES.comp)
 
-printDev(fit3.1.2.3)
-printDev(fit3.1.2.4)
-printDev(fit3.1.2.5)
-printDev(fit3.1.3.4)
-printDev(fit3.1.3.5)
-printDev(fit3.1.4.5)
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.1.2.4, fit3.1.2.5,
+      fit3.1.3.4, fit3.1.3.5, fit3.1.4.5)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3)
 
 #The independence model with the most significant delta deviance is the model,
 #SEGRADEQ + SESCHWRK + SEENJOY and all the subsequent three variable model will
@@ -210,106 +199,493 @@ fit3.12.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY,Hess=TRUE, d
 fit3.1.23 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
 fit3.13.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  * SEENJOY + SESCHWRK,Hess=TRUE, data = NHES.comp)
 
-printDev(fit3.12.3)
-printDev(fit3.1.23)
-printDev(fit3.13.2)
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2,fit3.1.23)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2)
 
 #Conditional independence models
 fit3.12.13 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ * SEENJOY,Hess=TRUE, data = NHES.comp)
 fit3.12.23 = polr(NHES.comp$SEGRADES ~ SESCHWRK * SEGRADEQ + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
 fit3.13.23 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  * SEENJOY + SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
 
-printDev(fit3.12.13)
-printDev(fit3.12.23)
-printDev(fit3.13.23)
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2,fit3.12.13,fit3.12.23, fit3.13.23)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2)
 
 #Homogenous association models
+fit3.13.23.12 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  * SEENJOY + SESCHWRK * SEENJOY +
+                       SEGRADEQ * SESCHWRK,Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2, fit3.13.23.12)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2)
 
 #Fully saturated model
+fit3.123 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY,Hess=TRUE, data = NHES.comp)
 
-#Complete independence model
-fit.ind <- polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY +
-               RACEETHN + CENREG, data=NHES.comp,Hess=TRUE)
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2, fit3.123)
 
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2)
 
+### Four variable models ###
+
+#The four variable models will start with the most significant three variable
+#model: SEGRADEQ + SESCHWRK + SEENJOY.
+
+#Independence models
+fit4.1.2.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.1.2.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2, fit4.1.2.3.5, fit4.1.2.3.4)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,fit3.13.2, fit4.1.2.3.4)
+
+#The independence model with the most significant delta deviance is the model,
+#SEGRADEQ + SESCHWRK + SEENJOY + RACEETHN and all the subsequent three variable 
+#model will be based only on this model.
 
 #Joint independence models
+fit4.12.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.13.2.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK + RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+fit4.14.2.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK + SEENJOY ,
+                   Hess=TRUE, data = NHES.comp)
+fit4.1.23.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.1.24.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * RACEETHN + SEENJOY ,
+                   Hess=TRUE, data = NHES.comp)
+fit4.1.2.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY * RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+
+fit4.12.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY * RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+fit4.13.24 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK * RACEETHN,
+                  Hess=TRUE, data = NHES.comp)
+fit4.14.23 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK * SEENJOY,
+                  Hess=TRUE, data = NHES.comp)
+
+fit4.1.234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY * RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+fit4.2.134 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * SEENJOY * RACEETHN,
+                  Hess=TRUE, data = NHES.comp) #Does not converge
+fit4.3.124 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * SESCHWRK * RACEETHN,
+                  Hess=TRUE, data = NHES.comp)
+fit4.4.123 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SESCHWRK * SEENJOY,
+                  Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4,fit4.14.2.3, fit4.1.23.4,
+      fit4.1.24.3, fit4.1.2.34, fit4.12.34, fit4.13.24, fit4.14.23, fit4.1.234,
+      fit4.3.124, fit4.4.123)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23)
 
 #Conditional independence models
+fit4.12.13.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY + RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+fit4.12.3.14 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + SEGRADEQ *RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.2.13.14 = polr(NHES.comp$SEGRADES ~  SESCHWRK + SEGRADEQ * SEENJOY + SEGRADEQ *RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.12.23.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY* SESCHWRK + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.12.3.24 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN* SESCHWRK,
+                    Hess=TRUE, data = NHES.comp)
+fit4.1.23.24 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  + SEENJOY * SESCHWRK+ RACEETHN* SESCHWRK,
+                    Hess=TRUE, data = NHES.comp)
+fit4.13.23.4 = polr(NHES.comp$SEGRADES ~ SEENJOY*SEGRADEQ + SEENJOY* SESCHWRK + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.13.2.34 = polr(NHES.comp$SEGRADES ~ SEENJOY*SEGRADEQ + SESCHWRK + SEENJOY* RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.1.32.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY*SESCHWRK + SEENJOY* RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.14.2.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* RACEETHN + SESCHWRK + SEENJOY* RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.1.24.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK* RACEETHN + SEENJOY* RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit4.14.24.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* RACEETHN + SESCHWRK* RACEETHN + SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
 
-#Homogenous association models
+
+fit4.12.134 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY * RACEETHN,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+fit4.12.234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY * RACEETHN* SESCHWRK,
+                  Hess=TRUE, data = NHES.comp)
+fit4.13.124 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SEGRADEQ *SESCHWRK * RACEETHN,
+                  Hess=TRUE, data = NHES.comp)
+fit4.13.324 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK * RACEETHN* SEENJOY,
+                   Hess=TRUE, data = NHES.comp)
+fit4.14.123 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SEGRADEQ *SESCHWRK * SEENJOY,
+                  Hess=TRUE, data = NHES.comp)
+fit4.14.423 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK * SEENJOY* RACEETHN,
+                   Hess=TRUE, data = NHES.comp)
+
+fit4.1.1234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEGRADEQ* SESCHWRK * SEENJOY * RACEETHN,
+                  Hess=TRUE, data = NHES.comp) #Does not converge
+fit4.2.2134 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SESCHWRK * SEGRADEQ * SEENJOY * RACEETHN,
+                  Hess=TRUE, data = NHES.comp) #Does not converge
+fit4.3.3124 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEENJOY * SEGRADEQ * SESCHWRK * RACEETHN,
+                  Hess=TRUE, data = NHES.comp) #Does not converge
+fit4.4.4123 = polr(NHES.comp$SEGRADES ~ RACEETHN + RACEETHN * SEGRADEQ * SESCHWRK * SEENJOY,
+                  Hess=TRUE, data = NHES.comp) #Does not converge
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23,
+      fit4.12.13.4, fit4.12.3.14, fit4.2.13.14, fit4.12.23.4, fit4.12.3.24,
+      fit4.1.23.24, fit4.13.23.4, fit4.13.2.34, fit4.1.32.34,fit4.14.2.34,
+      fit4.1.24.34, fit4.14.24.3, fit4.12.234, fit4.13.124, fit4.13.324,
+      fit4.14.123, fit4.14.423)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23,
+       fit4.2.13.14, fit4.13.124)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23,
+                  fit4.2.13.14, fit4.13.124)
+
+#Homogenous association model
+fit3.123.234.124.134 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK  * SEENJOY +
+                              SESCHWRK * SEENJOY * RACEETHN +
+                              SEGRADEQ * SESCHWRK  * RACEETHN +
+                              SEGRADEQ * SEENJOY  * RACEETHN,
+                            Hess=TRUE, data = NHES.comp) #Does not converge
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23,
+                  fit4.2.13.14, fit4.13.124)
 
 #Fully saturated model
-fit.sat <- polr(SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * RACEETHN * CENREG, data=NHES.comp,Hess=TRUE)
+fit4.1234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * RACEETHN,Hess=TRUE, data = NHES.comp)
+#Does not converge
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, fit4.14.23,
+                  fit4.2.13.14, fit4.13.124)
+
+### Five variable models ###
+
+#Independence models
+fit5.1.2.3.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + RACEETHN + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+      fit5.1.2.3.4.5)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5)
+
+#Joint independence models
+fit5.12.3.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN + CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.13.2.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK + RACEETHN + CENREG,
+                     Hess=TRUE, data = NHES.comp)
+fit5.14.2.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SEENJOY + SESCHWRK + CENREG,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.2.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SEENJOY + SESCHWRK + RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.23.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY + RACEETHN + CENREG,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.24.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * RACEETHN + SEENJOY + CENREG,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.25.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * CENREG + SEENJOY + RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.2.34.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY * RACEETHN + CENREG,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.2.35.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY * CENREG + RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.1.2.3.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + CENREG * RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+      fit5.1.2.3.4.5,
+      fit5.12.3.4.5, fit5.13.2.4.5, fit5.14.2.3.5, fit5.15.2.3.4, fit5.1.23.4.5,
+      fit5.1.24.3.5,fit5.1.25.3.4, fit5.1.2.34.5, fit5.1.2.35.4, fit5.1.2.3.45)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5)
+
+fit5.1.23.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY + RACEETHN * CENREG,
+                  Hess=TRUE, data = NHES.comp)
+fit5.1.24.35 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * RACEETHN + SEENJOY * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.25.34 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * CENREG + RACEETHN * SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
+fit5.2.13.45 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * SEENJOY + RACEETHN * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.2.14.35 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * RACEETHN + SEENJOY * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.2.15.34 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * CENREG + RACEETHN * SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
+fit5.3.12.45 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * SESCHWRK + RACEETHN * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.3.14.25 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * RACEETHN + SESCHWRK * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.3.15.24 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * CENREG + RACEETHN * SESCHWRK,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.12.35 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SESCHWRK + SEENJOY * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.13.25 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SEENJOY + SESCHWRK * CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.15.23 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * CENREG + SEENJOY * SESCHWRK,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.12.34 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * SESCHWRK + SEENJOY * RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.13.24 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * SEENJOY + SESCHWRK * RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.14.23 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * RACEETHN + SEENJOY * SESCHWRK,
+                    Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+      fit5.1.2.3.4.5, fit5.14.2.3.5, fit5.1.23.45, fit5.1.24.35, fit5.1.25.34,
+      fit5.2.13.45,fit5.2.14.35, fit5.2.15.34,
+      fit5.3.12.45, fit5.3.14.25,fit5.3.15.24,
+      fit5.4.12.35, fit5.4.13.25, fit5.4.15.23,
+      fit5.5.12.34, fit5.5.13.24,fit5.5.14.23 )
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5)
+
+fit5.1.234.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY * RACEETHN + CENREG,
+                  Hess=TRUE, data = NHES.comp)
+fit5.1.235.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY *CENREG  + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.245.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * RACEETHN *CENREG  + SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.345.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY * RACEETHN *CENREG  + SESCHWRK,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.2.134.5 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * SEENJOY * RACEETHN + CENREG,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.2.135.4 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * SEENJOY *CENREG  + RACEETHN,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.2.145.3 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * RACEETHN *CENREG  + SEENJOY,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.2.345.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEENJOY * RACEETHN *CENREG  + SEGRADEQ,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.3.124.5 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * SESCHWRK * RACEETHN + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.3.125.4 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * SESCHWRK *CENREG  + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit5.3.145.2 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * RACEETHN *CENREG  + SESCHWRK,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.3.245.1 = polr(NHES.comp$SEGRADES ~ SEENJOY + SESCHWRK * RACEETHN *CENREG  + SEGRADEQ,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.123.5 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SESCHWRK * SEENJOY + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.125.3 = polr(NHES.comp$SEGRADES ~RACEETHN  + SEGRADEQ * SESCHWRK *CENREG  + SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
+fit5.4.135.2 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SEENJOY *CENREG  + SESCHWRK,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.4.235.1 = polr(NHES.comp$SEGRADES ~ RACEETHN + SESCHWRK * SEENJOY *CENREG  + SEGRADEQ,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.123.4 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * SESCHWRK * SEENJOY + RACEETHN,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.124.3 = polr(NHES.comp$SEGRADES ~CENREG  + SEGRADEQ * SESCHWRK *RACEETHN  + SEENJOY,
+                    Hess=TRUE, data = NHES.comp)
+fit5.5.134.2 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * SEENJOY *RACEETHN  + SESCHWRK,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.5.234.1 = polr(NHES.comp$SEGRADES ~ CENREG + SESCHWRK * SEENJOY *RACEETHN  + SEGRADEQ,
+                    Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+      fit5.1.2.3.4.5, fit5.14.2.3.5,
+      fit5.1.234.5, fit5.1.235.4, fit5.1.245.3, fit5.3.124.5, fit5.3.125.4,
+      fit5.3.245.1, fit5.4.123.5, fit5.4.125.3, fit5.4.235.1, fit5.5.123.4,
+      fit5.5.124.3, fit5.5.234.1)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5,
+                  fit5.3.124.5)
+
+fit5.1.2345 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY * RACEETHN * CENREG,
+                    Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.2.1345 = polr(NHES.comp$SEGRADES ~ SESCHWRK + SEGRADEQ * SEENJOY * RACEETHN * CENREG,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.3.1245 = polr(NHES.comp$SEGRADES ~ SEENJOY + SEGRADEQ * SESCHWRK * RACEETHN * CENREG,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.4.1235 = polr(NHES.comp$SEGRADES ~ RACEETHN + SEGRADEQ * SEENJOY * SESCHWRK * CENREG,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.5.1234 = polr(NHES.comp$SEGRADES ~ CENREG + SEGRADEQ * SEENJOY * RACEETHN * SESCHWRK,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5,
+                  fit5.3.124.5)
+
+#Conditional independence models
+fit5.12.13.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY + RACEETHN + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.12.3.14.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + SEGRADEQ *RACEETHN + CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.12.3.4.15 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN + SEGRADEQ *CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.2.13.14.5 = polr(NHES.comp$SEGRADES ~  SESCHWRK + SEGRADEQ * SEENJOY + SEGRADEQ *RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.2.13.4.15 = polr(NHES.comp$SEGRADES ~  SESCHWRK + SEGRADEQ * SEENJOY + RACEETHN+ SEGRADEQ *CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.2.3.14.15 = polr(NHES.comp$SEGRADES ~  SESCHWRK +  SEENJOY + SEGRADEQ *RACEETHN+ SEGRADEQ *CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.12.23.4.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY* SESCHWRK + RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.12.3.24.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN* SESCHWRK+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.12.3.4.25 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY + RACEETHN+ CENREG* SESCHWRK,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.23.24.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  + SEENJOY * SESCHWRK+ RACEETHN* SESCHWRK+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.23.4.25 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  + SEENJOY * SESCHWRK+ RACEETHN+ CENREG* SESCHWRK,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.3.24.25 = polr(NHES.comp$SEGRADES ~ SEGRADEQ  + SEENJOY + RACEETHN* SESCHWRK+ CENREG* SESCHWRK,
+                      Hess=TRUE, data = NHES.comp)
+fit5.13.23.4.5 = polr(NHES.comp$SEGRADES ~ SEENJOY*SEGRADEQ + SEENJOY* SESCHWRK + RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.13.2.34.5 = polr(NHES.comp$SEGRADES ~ SEENJOY*SEGRADEQ + SESCHWRK + SEENJOY* RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.13.2.4.35 = polr(NHES.comp$SEGRADES ~ SEENJOY*SEGRADEQ + SESCHWRK +  RACEETHN+ SEENJOY*CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.32.34.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY*SESCHWRK + SEENJOY* RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.32.4.35 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SEENJOY*SESCHWRK +  RACEETHN+ SEENJOY*CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.2.34.35 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK +  SEENJOY*RACEETHN+ SEENJOY*CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.14.24.3.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* RACEETHN + SESCHWRK* RACEETHN + SEENJOY+ CENREG,
+                      Hess=TRUE, data = NHES.comp)
+fit5.14.2.34.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* RACEETHN + SESCHWRK + SEENJOY* RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.14.2.3.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* RACEETHN + SESCHWRK + SEENJOY+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.24.34.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK* RACEETHN + SEENJOY* RACEETHN+ CENREG,
+                    Hess=TRUE, data = NHES.comp)
+fit5.1.24.3.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK* RACEETHN + SEENJOY+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.2.43.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY* RACEETHN+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.15.25.3.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* CENREG + SESCHWRK* CENREG + SEENJOY+ RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.15.2.35.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* CENREG + SESCHWRK + SEENJOY* CENREG+ RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.15.2.3.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ* CENREG + SESCHWRK + SEENJOY+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.25.35.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK* CENREG + SEENJOY* CENREG+ RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.25.3.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK* CENREG + SEENJOY+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+fit5.1.2.35.45 = polr(NHES.comp$SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY* CENREG+ CENREG* RACEETHN,
+                      Hess=TRUE, data = NHES.comp)
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+      fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+      fit5.1.2.3.4.5, fit5.14.2.3.5,fit5.3.124.5, 
+      fit5.1.2.35.45, fit5.1.25.3.45,fit5.1.25.35.4, fit5.15.2.3.45,
+      fit5.15.2.35.4,fit5.15.25.3.4,fit5.1.2.43.45, fit5.1.24.3.45,
+      fit5.1.24.34.5, fit5.14.2.3.45, fit5.14.2.34.5, fit5.14.24.3.5,
+      fit5.1.2.34.35, fit5.1.32.4.35,fit5.1.32.34.5,fit5.1.32.34.5,
+      fit5.13.2.4.35,fit5.13.2.34.5,fit5.13.23.4.5,fit5.1.3.24.25,fit5.1.23.4.25,
+      fit5.1.23.24.5,fit5.12.3.4.25,fit5.12.3.24.5,fit5.12.23.4.5,fit5.2.3.14.15,
+      fit5.12.3.24.5, fit5.2.13.14.5, fit5.12.3.4.15, fit5.12.3.14.5, fit5.12.13.4.5)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5,fit5.2.3.14.15,fit5.12.3.14.5)
+
+fit5.12.134.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY * RACEETHN + CENREG,
+                   Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.12.234.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY * RACEETHN* SESCHWRK+ CENREG,
+                   Hess=TRUE, data = NHES.comp)
+fit5.13.124.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SEGRADEQ *SESCHWRK * RACEETHN+ CENREG,
+                   Hess=TRUE, data = NHES.comp)
+fit5.13.324.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK * RACEETHN* SEENJOY+ CENREG,
+                   Hess=TRUE, data = NHES.comp)
+fit5.14.123.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SEGRADEQ *SESCHWRK * SEENJOY+ CENREG,
+                   Hess=TRUE, data = NHES.comp)
+fit5.14.423.5 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK * SEENJOY* RACEETHN+ CENREG,
+                   Hess=TRUE, data = NHES.comp)
+fit5.12.135.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY * CENREG +RACEETHN,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.12.235.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY * CENREG* SESCHWRK+ RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.13.125.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SEGRADEQ *SESCHWRK * CENREG+ RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.13.325.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK * CENREG* SEENJOY+ RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.123.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SEGRADEQ *SESCHWRK * SEENJOY+ RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.523.4 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SESCHWRK * SEENJOY* CENREG + RACEETHN,
+                     Hess=TRUE, data = NHES.comp)
+fit5.12.145.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *RACEETHN * CENREG +SEENJOY,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.12.245.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + RACEETHN * CENREG* SESCHWRK+ SEENJOY,
+                     Hess=TRUE, data = NHES.comp)
+fit5.14.125.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SEGRADEQ *SESCHWRK * CENREG+ SEENJOY,
+                     Hess=TRUE, data = NHES.comp)
+fit5.14.425.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK * CENREG* RACEETHN+SEENJOY,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.124.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SEGRADEQ *SESCHWRK * RACEETHN+ SEENJOY,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.524.3 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SESCHWRK * RACEETHN* CENREG + SEENJOY,
+                     Hess=TRUE, data = NHES.comp)
+fit5.15.134.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ *SEENJOY * RACEETHN + SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.15.534.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * CENREG + SEENJOY * RACEETHN* CENREG+ SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.13.154.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + SEGRADEQ *CENREG * RACEETHN+ SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.13.354.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SEENJOY + CENREG * RACEETHN* SEENJOY+ SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.14.153.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SEGRADEQ *CENREG * SEENJOY+ SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.14.453.2 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + CENREG * SEENJOY* RACEETHN+ SESCHWRK,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.25.234.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * CENREG + SESCHWRK *SEENJOY * RACEETHN + SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp) 
+fit5.25.534.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * CENREG + SEENJOY * RACEETHN* CENREG+ SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.23.254.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * SEENJOY + SESCHWRK *CENREG * RACEETHN+ SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp)
+fit5.23.354.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * SEENJOY + CENREG * RACEETHN* SEENJOY+SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+fit5.24.253.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * RACEETHN + SESCHWRK *CENREG * SEENJOY+ SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp)
+fit5.24.453.1 = polr(NHES.comp$SEGRADES ~ SESCHWRK * RACEETHN + CENREG * SEENJOY* RACEETHN+ SEGRADEQ,
+                     Hess=TRUE, data = NHES.comp) #Does not converge
+
+anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5,fit5.2.3.14.15,fit5.12.3.14.5,
+      fit5.24.253.1,fit5.23.254.1,fit5.25.234.1,fit5.15.524.3,fit5.15.124.3,
+      fit5.14.425.3,fit5.14.125.3,fit5.14.125.3,fit5.12.245.3,fit5.15.523.4,
+      fit5.15.123.4,fit5.13.325.4,fit5.13.125.4,fit5.12.235.4,fit5.14.423.5,
+      fit5.14.123.5, fit5.13.324.5,fit5.13.124.5, fit5.12.234.5)
+
+cum.anova = anova(fit0, fit1.1, fit2.1.2, fit2.12, fit3.1.2.3, fit3.12.3,
+                  fit3.13.2, fit4.1.2.3.4,fit4.12.3.4, fit4.13.2.4, 
+                  fit5.1.2.3.4.5, fit5.14.2.3.5,fit5.2.3.14.15,fit5.12.3.14.5,
+                  fit5.15.124.3)
+
+#Since all the four variable models failed to converge when assessing four variable
+#association, no more higher association models will be assessed because they will
+#also fail to converge.
 
 
+#Fully saturated model
+fit4.1234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * RACEETHN,Hess=TRUE, data = NHES.comp)
+#Does not converge
 
-mod3.0 = polr(NHES$SEGRADES ~ 1,Hess=TRUE)
-mod3.1 = polr(NHES$SEGRADES ~ SEGRADEQ, data = NHES.comp,Hess=TRUE)
-mod3.2 = polr(NHES$SEGRADES ~ SESCHWRK, data = NHES.comp,Hess=TRUE)
-mod3.3 = polr(NHES$SEGRADES ~ SEENJOY, data = NHES.comp,Hess=TRUE)
-mod3.1.2 = polr(NHES$SEGRADES ~ SEGRADEQ + SESCHWRK, data = NHES.comp,Hess=TRUE)
-mod3.1.3 = polr(NHES$SEGRADES ~ SEGRADEQ + SEENJOY, data = NHES.comp,Hess=TRUE)
-mod3.2.3 = polr(NHES$SEGRADES ~ SESCHWRK +SEENJOY, data = NHES.comp,Hess=TRUE)
-mod3.12 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK, data = NHES.comp,Hess=TRUE)
-mod3.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY, data = NHES.comp,Hess=TRUE)
-mod3.23 = polr(NHES$SEGRADES ~ SESCHWRK * SEENJOY, data = NHES.comp,Hess=TRUE)
+#Final Analysis-of-Deviance Table
+cum.anova
 
-# mod3.12 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK, data = NHES.comp,Hess=TRUE)
-# mod3.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.23 = polr(NHES$SEGRADES ~ SESCHWRK * SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.1.23 = polr(NHES$SEGRADES ~ SEGRADEQ + SESCHWRK * SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.12.3 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK + SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.2.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK, data = NHES.comp,Hess=TRUE)
-# mod3.12.23 = polr(NHES$SEGRADES ~ SEGRADEQ*SESCHWRK + SESCHWRK * SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.12.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SESCHWRK + SEGRADEQ*SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.23.13 = polr(NHES$SEGRADES ~ SEGRADEQ * SEENJOY + SESCHWRK*SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.1.2.3 = polr(NHES$SEGRADES ~ SEGRADEQ + SESCHWRK +SEENJOY, data = NHES.comp,Hess=TRUE)
-# mod3.123 = polr(NHES$SEGRADES ~ SESCHWRK * SEENJOY * SEGRADEQ, data = NHES.comp,Hess=TRUE)
-# anova(mod3.0,mod3.1,mod3.1.2, mod3.12, mod3.2, mod3.3,mod3.1.3, mod3.2.3,
-#       mod3.13,mod3.23,mod3.1.23,mod3.12.3,mod3.2.13,mod3.12.23,mod3.12.13,mod3.23.13,
-#       mod3.1.2.3,mod3.123)
-# 
-# mod3.1.2.3.4 = polr(NHES$SEGRADES ~ SEGRADEQ + SESCHWRK +SEENJOY + YRSADDR, data = NHES.comp,Hess=TRUE)
-# 
-# vars = c('SESCHWRK','SEENJOY', 'SEFUTUREX', 'RACEETHN', 'CENREG', 'OWNRNTHB', 'FHWKHRS','YRSADDR','S1STCHOI', 'FSFREQ', 'SEGBEHAV', 'SEGWORK', 'SEABSNT', 'SEREPEAT', 'SESUSOUT')
-# df = NHES.comp[,c('SEGRADEQ','SEGRADES')]
-# for(v in vars){
-#   temp.mod1 = polr(SEGRADES~., data = df)
-#   names = c(colnames(df),v)
-#   df = cbind(df,NHES.comp[,v])
-#   colnames(df) = names
-#   #addvars = c(addvars,v)
-#   temp.mod2 = polr(SEGRADES~., data = df)
-#   print(anova(temp.mod1,temp.mod2))
-# }
 
-# #When adding in variables, the only variable that did not have a significant decrease was
-# #YRSADDR.  Run it again without YRSADDR and see if we still get significant delta
-# #deviances when adding new variables.
-# vars = c('SEGRADEQ','SESCHWRK', 'RACEETHN', 'CENREG', 'OWNRNTHB', 'FHWKHRS','SEENJOY', 'SEFUTUREX','S1STCHOI', 'FSFREQ', 'SEGBEHAV', 'SEGWORK', 'SEABSNT', 'SEREPEAT', 'SESUSOUT')
-# LRstats = data.frame(vars, stringsAsFactors = F)
-# for(i in 1:100){
-#   df = data.frame(SEGRADES = NHES.comp$SEGRADES)
-#   stats = data.frame(var = "", LRStat = 0, stringsAsFactors = F)
-#   for(v in sample(vars,length(vars))){
-#     if(ncol(df) == 1){
-#       temp.mod1 = polr(SEGRADES~1,data = df)
-#     } else{
-#       temp.mod1 = polr(SEGRADES~., data = df)
-#     }
-#     names = c(colnames(df),v)
-#     df = cbind(df,NHES.comp[,v])
-#     colnames(df) = names
-#     temp.mod2 = polr(SEGRADES~., data = df)
-#     aov = anova(temp.mod1,temp.mod2)
-#     stats = rbind(stats,c(names[length(names)],as.character(aov$`LR stat.`[2])))
-#   }
-#   LRstats = cbind(LRstats,stats[-1,2])
-#   if(i%%10 == 0){
-#     print(paste("Processed: ", i))
-#   }
-# }
-# LRstats[2:ncol(LRstats)] = lapply(LRstats[2:ncol(LRstats)],as.numeric)
-# LRmeans = data.frame(vars = LRstats$vars,means = rowMeans(LRstats[,2:ncol(LRstats)]))
-# LRmeans = LRmeans[order(LRmeans$means, decreasing = T),]
