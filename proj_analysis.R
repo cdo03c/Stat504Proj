@@ -110,7 +110,7 @@ exp(cbind(OR = coef(mod.fin2), ci))
 #Therefore, we are going to remove SEFUTUREX from the model and combine 
 #categories 4 and 5 for SEGRADEQ.
 
-NHES.comp$SEGRADEQ = ifelse(NHES.comp$SEGRADEQ == 5, 4, NHES.comp$SEGRADEQ)
+NHES.comp$SEGRADEQ = factor(ifelse(NHES.comp$SEGRADEQ == 5, 4, NHES.comp$SEGRADEQ))
 
 mod.fin2 = polr(SEGRADES ~ SEGRADEQ + SESCHWRK + SEENJOY + RACEETHN +
                   CENREG + SEGRADEQ:RACEETHN, data=NHES.comp, Hess = T)
@@ -688,4 +688,19 @@ fit4.1234 = polr(NHES.comp$SEGRADES ~ SEGRADEQ * SESCHWRK * SEENJOY * RACEETHN,H
 #Final Analysis-of-Deviance Table
 cum.anova
 
+#Final Model
+fit.final = polr(NHES.comp$SEGRADES ~ SEGRADEQ * RACEETHN + SESCHWRK + SEENJOY + CENREG,Hess=TRUE, data = NHES.comp)
+summary(fit.final)
 
+## store coefficient table
+ctable <- coef(summary(fit.final))
+
+## calculate and store p values
+p <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+
+## combined table
+print(ctable <- cbind(ctable, "p value" = p))
+
+ci <- confint(fit.final)
+
+exp(cbind(OR = coef(fit.final), ci))
