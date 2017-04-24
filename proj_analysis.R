@@ -121,15 +121,8 @@ diagnoseModel(mod.fin2)
 #model suggested by running StepAIC with BIC penalty and evaluating the significance
 #of the coefficients.
 
-printDev = function(model1){
-  print(model1$call)
-  print(model1$deviance)
-  print(model1$df.residual)
-}
-
 #Intercept-only model
 fit0 = polr(NHES.comp$SEGRADES ~ 1,Hess=TRUE)
-printDev(fit0)
 
 ### Single Variable Models ###
 
@@ -704,3 +697,8 @@ print(ctable <- cbind(ctable, "p value" = p))
 ci <- confint(fit.final)
 
 exp(cbind(OR = coef(fit.final), ci))
+
+exp(fit.final$zeta)
+
+#Chi-Square Goodness-of-Fit Test
+1-pchisq(deviance(fit.final),df.residual(fit.final))
